@@ -82,8 +82,10 @@ fun AllMoviesScreenContent(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(vertical = 32.dp, horizontal = 24.dp)
+            .padding(horizontal = 24.dp)
     ) {
+
+        Spacer(modifier = Modifier.height(32.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),

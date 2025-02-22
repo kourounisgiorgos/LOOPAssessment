@@ -79,15 +79,15 @@ fun MainScreenContent(
     val context = LocalContext.current
     var favoriteMovieIds by remember { mutableStateOf(getFavoriteMovieIds(context).toMutableSet()) }
 
-
     val favoriteMovies = movies.filter { it.id.toString() in favoriteMovieIds }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(vertical = 32.dp)
     ) {
+        Spacer(modifier = Modifier.height(32.dp))
+
         ProfileHeader(onGoToAllMovies = onGoToAllMovies)
 
         Spacer(modifier = Modifier.height(64.dp))
@@ -137,7 +137,9 @@ fun MainScreenContent(
         ) { updatedFavorites ->
             favoriteMovieIds = updatedFavorites.toMutableSet()
         }
+
     }
+
 }
 
 @Composable
@@ -220,6 +222,9 @@ private fun MovieFavoritesPager(favoriteMovies: List<Movie>, onMovieDetails: ((M
                 .clip(RoundedCornerShape(14.dp))
                 .width(182.dp)
                 .height(270.dp)
+                .clickable{
+                    onMovieDetails?.invoke(movie)
+                }
         )
     }
 }

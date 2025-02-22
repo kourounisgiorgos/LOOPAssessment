@@ -10,6 +10,7 @@ import androidx.navigation.compose.*
 import com.kourounis.loopassessmentkourounis.R
 import com.kourounis.loopassessmentkourounis.compose.data.Movie
 import com.kourounis.loopassessmentkourounis.compose.screens.AllMoviesScreen
+import com.kourounis.loopassessmentkourounis.compose.screens.MovieDetailsScreen
 import com.kourounis.loopassessmentkourounis.compose.utils.loadMoviesFromJson
 
 class ComposeActivity : ComponentActivity() {
@@ -41,7 +42,7 @@ fun ComposeNavigation() {
                 movies = movies.value,
                 staffPicks = staffPicks.value,
                 onGoToAllMovies = { navController.navigate("all-movies-screen") },
-                onMovieDetails = { navController.navigate("movie-details") }
+                onMovieDetails = { movie -> navController.navigate("movie-details/${movie.id}") }
             )
         }
 
@@ -50,7 +51,17 @@ fun ComposeNavigation() {
             AllMoviesScreen(
                 movies = movies.value,
                 onBack = { navController.navigate("main-screen") },
-                onMovieDetails = { navController.navigate("movie-details") }
+                onMovieDetails = { movie -> navController.navigate("movie-details/${movie.id}") }
+            )
+        }
+
+        composable("movie-details/{movieId}") { backStackEntry ->
+            val movieId = backStackEntry.arguments?.getString("movieId")?.toIntOrNull()
+            val selectedMovie = movies.value.find { it.id == movieId }
+
+            MovieDetailsScreen(
+                movie = selectedMovie,
+                onBack = { navController.popBackStack() }
             )
         }
     }

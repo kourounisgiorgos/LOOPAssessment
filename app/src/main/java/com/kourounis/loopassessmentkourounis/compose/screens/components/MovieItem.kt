@@ -1,5 +1,6 @@
 package com.kourounis.loopassessmentkourounis.compose.screens.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,12 +21,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.kourounis.loopassessmentkourounis.R
 import com.kourounis.loopassessmentkourounis.compose.data.Movie
 import kotlin.math.floor
 
@@ -41,7 +40,10 @@ fun MovieItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp),
+            .padding(horizontal = 8.dp)
+            .clickable {
+                onMovieDetails?.invoke(movie)
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
@@ -68,29 +70,7 @@ fun MovieItem(
                 fontWeight = FontWeight.Bold
             )
 
-            Row {
-                val maxRating = 5
-                val filledStars = floor(movie.rating).toInt()
-                val emptyStars = maxRating - filledStars
-
-                repeat(filledStars) {
-                    Icon(
-                        imageVector = Icons.Filled.Star,
-                        contentDescription = "Filled Star",
-                        tint = Color(0XFFFD9E02),
-                        modifier = Modifier.size(16.dp)
-                    )
-                }
-
-                repeat(emptyStars) {
-                    Icon(
-                        imageVector = Icons.Filled.Star,
-                        contentDescription = "Empty Star",
-                        tint = Color.LightGray,
-                        modifier = Modifier.size(16.dp)
-                    )
-                }
-            }
+            RatingStars(movie)
         }
 
 

@@ -39,3 +39,25 @@ fun toggleFavoriteMovie(context: Context, movieId: String): Boolean {
 
     return isFavorite
 }
+
+fun getLanguageName(languageCode: String): String {
+    val languageMap = mapOf(
+        "en" to "English",
+        "ja" to "Japanese",
+        "es" to "Spanish",
+        "fr" to "French",
+        "de" to "German",
+        "zh" to "Chinese",
+        "ko" to "Korean",
+        "it" to "Italian",
+        "ru" to "Russian",
+        "pt" to "Portuguese",
+        "ar" to "Arabic",
+        "hi" to "Hindi"
+    )
+    return languageMap[languageCode] ?: "Unknown"
+}
+
+fun formatWithDots(number: Long): String {
+    return "%,d".format(number).replace(",", ".")
+}

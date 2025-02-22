@@ -19,7 +19,7 @@ fun MovieList(
     onFavoriteUpdated: (Set<String>) -> Unit
 ) {
     LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
         modifier = if(paddingValues != null) Modifier.fillMaxSize().padding(paddingValues) else Modifier.fillMaxSize()
     ) {
         items(movieList) { movie ->
