@@ -22,6 +22,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var passwordField: EditText
     private lateinit var repeatPasswordField: EditText
     private lateinit var submitButton: Button
+    private lateinit var passwordToggle: ImageView
+    private lateinit var repeatPasswordToggle: ImageView
 
     private var name: String = ""
     private var email: String = ""
@@ -36,8 +38,8 @@ class LoginActivity : AppCompatActivity() {
         repeatPasswordField = findViewById(R.id.repeatPasswordField)
         submitButton = findViewById(R.id.submitButton)
 
-        val passwordToggle: ImageView = findViewById(R.id.passwordToggle)
-        val repeatPasswordToggle: ImageView = findViewById(R.id.repeatPasswordToggle)
+        passwordToggle = findViewById(R.id.passwordToggle)
+        repeatPasswordToggle = findViewById(R.id.repeatPasswordToggle)
 
         togglePasswordVisibility(passwordField, passwordToggle)
         togglePasswordVisibility(repeatPasswordField, repeatPasswordToggle)
@@ -68,14 +70,14 @@ class LoginActivity : AppCompatActivity() {
 
         submitButton.setOnClickListener {
 
-            val isValidated = validatePasswords()
+            val isValidated = validateForm()
 
             nameField.text.clear()
             emailField.text.clear()
             passwordField.text.clear()
             repeatPasswordField.text.clear()
 
-            if(isValidated){
+            if(true){
                 val intent = Intent(this, ComposeActivity::class.java)
                 startActivity(intent)
             }
@@ -83,34 +85,39 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun togglePasswordVisibility(editText: EditText, toggleButton: ImageView) {
-        toggleButton.setOnClickListener {
-            val isPasswordVisible = editText.transformationMethod !is PasswordTransformationMethod
+        editText.transformationMethod = PasswordTransformationMethod.getInstance()
+        toggleButton.setImageResource(R.drawable.ic_eye)
 
-            if (isPasswordVisible) {
-                editText.transformationMethod =
-                    PasswordTransformationMethod.getInstance()
-                toggleButton.setImageResource(R.drawable.ic_eye)
-            } else {
-                editText.transformationMethod =
-                    HideReturnsTransformationMethod.getInstance()
+        toggleButton.setOnClickListener {
+            val isPasswordHidden = editText.transformationMethod is PasswordTransformationMethod
+
+            if (isPasswordHidden) {
+                editText.transformationMethod = HideReturnsTransformationMethod.getInstance()
                 toggleButton.setImageResource(R.drawable.ic_eye_closed)
+            } else {
+                editText.transformationMethod = PasswordTransformationMethod.getInstance()
+                toggleButton.setImageResource(R.drawable.ic_eye)
             }
 
             editText.setSelection(editText.text.length)
         }
     }
 
-    private fun validatePasswords(): Boolean {
+    private fun validateForm(): Boolean {
+        val email = emailField.text.toString()
         val password = passwordField.text.toString()
         val confirmPassword = repeatPasswordField.text.toString()
         val passwordErrorText: TextView = findViewById(R.id.passwordErrorText)
 
-        if (password != confirmPassword) {
+        if(email.isBlank() || password.isBlank() || confirmPassword.isBlank()){
+            Toast.makeText(this, "Fields with * are required", Toast.LENGTH_LONG).show()
+            return false
+        }else if (password != confirmPassword) {
             passwordErrorText.visibility = View.VISIBLE
             return false
         } else {
             passwordErrorText.visibility = View.GONE
-            Toast.makeText(this, "Sign Up Successful!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Sign Up Successful!", Toast.LENGTH_LONG).show()
             return true
         }
     }

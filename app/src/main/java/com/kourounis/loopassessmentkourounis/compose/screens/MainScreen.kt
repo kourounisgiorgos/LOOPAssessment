@@ -1,5 +1,6 @@
 package com.kourounis.loopassessmentkourounis.compose.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +15,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -30,8 +34,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -39,9 +45,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
+import com.kourounis.loopassessmentkourounis.R
 import com.kourounis.loopassessmentkourounis.compose.data.Movie
 import com.kourounis.loopassessmentkourounis.compose.screens.components.Loader
 import com.kourounis.loopassessmentkourounis.compose.screens.components.MovieList
@@ -113,7 +117,7 @@ fun MainScreenContent(
             Text(text = "No favorites yet", fontSize = 14.sp, color = Color.Gray)
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         Text(
             modifier = Modifier
@@ -185,46 +189,44 @@ private fun ProfileHeader(onGoToAllMovies: (() -> Unit)?) {
                 .size(40.dp)
                 .shadow(elevation = 8.dp, shape = RoundedCornerShape(12.dp))
                 .clip(RoundedCornerShape(12.dp))
+                .clickable { onGoToAllMovies?.invoke() }
                 .background(Color.White)
                 .padding(8.dp)
-                .clickable { onGoToAllMovies?.invoke() }
         ) {
-            Icon(
-                imageVector = Icons.Default.Search,
+            Image(
+                painter = painterResource(R.drawable.ic_search),
                 contentDescription = "Search",
-                modifier = Modifier.align(Alignment.Center),
-                tint = Color.Black
+                modifier = Modifier.align(Alignment.Center).size(18.dp),
             )
         }
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun MovieFavoritesPager(favoriteMovies: List<Movie>, onMovieDetails: ((Movie) -> Unit)?) {
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(pageCount = { favoriteMovies.size })
 
     HorizontalPager(
-        count = favoriteMovies.size,
         state = pagerState,
-        contentPadding = PaddingValues(start = 64.dp, end = 64.dp),
-        itemSpacing = (-64).dp,
+        contentPadding = PaddingValues(horizontal = 24.dp),
+        pageSpacing = 24.dp,
+        pageSize = PageSize.Fixed(182.dp),
         modifier = Modifier.fillMaxWidth()
     ) { page ->
-
         val movie = favoriteMovies[page]
 
         AsyncImage(
             model = movie.posterUrl,
             contentDescription = "Movie Poster",
             modifier = Modifier
-                .shadow(8.dp, shape = RoundedCornerShape(14.dp))
+                .shadow(elevation = 16.dp, RoundedCornerShape(8.dp))
                 .clip(RoundedCornerShape(14.dp))
                 .width(182.dp)
                 .height(270.dp)
-                .clickable{
+                .clickable {
                     onMovieDetails?.invoke(movie)
-                }
+                },
+            placeholder = ColorPainter(Color.White)
         )
     }
 }

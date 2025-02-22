@@ -2,6 +2,9 @@ package com.kourounis.loopassessmentkourounis.compose.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kourounis.loopassessmentkourounis.compose.data.Movie

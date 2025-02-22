@@ -1,5 +1,6 @@
 package com.kourounis.loopassessmentkourounis.compose.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,9 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
@@ -33,11 +36,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kourounis.loopassessmentkourounis.R
 import com.kourounis.loopassessmentkourounis.compose.data.Movie
 import com.kourounis.loopassessmentkourounis.compose.screens.components.Loader
 import com.kourounis.loopassessmentkourounis.compose.screens.components.MovieList
@@ -128,15 +133,15 @@ fun AllMoviesScreenContent(
             ) {
                 Box(
                     modifier = Modifier
-                        .size(36.dp)
+                        .size(40.dp)
                         .clip(CircleShape)
                         .background(Color.White),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.Filled.Search,
+                    Image(
+                        painter = painterResource(R.drawable.ic_search),
                         contentDescription = "Search",
-                        tint = Color.Gray
+                        modifier = Modifier.align(Alignment.Center).size(18.dp),
                     )
                 }
 
@@ -161,8 +166,7 @@ fun AllMoviesScreenContent(
             }
         }
 
-
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         MovieList(movieList = filteredMovies, onMovieDetails = onMovieDetails) { updatedFavorites ->
             favoriteMovieIds = updatedFavorites.toMutableSet()

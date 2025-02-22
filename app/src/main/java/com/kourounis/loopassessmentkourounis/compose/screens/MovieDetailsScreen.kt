@@ -42,7 +42,10 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun MovieDetailsScreen(movie: Movie?, onBack: () -> Unit) {
+fun MovieDetailsScreen(
+    movie: Movie?,
+    onBack: () -> Unit
+) {
 
     if (movie == null) {
         Text("Movie not found", fontSize = 20.sp, modifier = Modifier.padding(16.dp))
@@ -121,7 +124,7 @@ fun MovieDetailsScreen(movie: Movie?, onBack: () -> Unit) {
             Spacer(modifier = Modifier.width(4.dp))
 
             Text(
-                text = "${movie.runtime / 60}h • ${movie.runtime % 60}m",
+                text = "• ${movie.runtime / 60}h ${movie.runtime % 60}m",
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Light
@@ -153,7 +156,7 @@ fun MovieDetailsScreen(movie: Movie?, onBack: () -> Unit) {
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
@@ -169,7 +172,7 @@ fun MovieDetailsScreen(movie: Movie?, onBack: () -> Unit) {
                     Text(
                         text = genre,
                         fontSize = 14.sp,
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                     )
                 }
             }
