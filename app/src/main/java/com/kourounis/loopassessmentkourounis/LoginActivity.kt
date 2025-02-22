@@ -1,5 +1,6 @@
 package com.kourounis.loopassessmentkourounis
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,8 +13,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.kourounis.loopassessmentkourounis.compose.ComposeActivity
 
-class MainActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     private lateinit var nameField: EditText
     private lateinit var emailField: EditText
@@ -65,11 +67,18 @@ class MainActivity : AppCompatActivity() {
 
 
         submitButton.setOnClickListener {
-            validatePasswords()
+
+            val isValidated = validatePasswords()
+
             nameField.text.clear()
             emailField.text.clear()
             passwordField.text.clear()
             repeatPasswordField.text.clear()
+
+            if(isValidated){
+                val intent = Intent(this, ComposeActivity::class.java)
+                startActivity(intent)
+            }
         }
     }
 
@@ -91,16 +100,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun validatePasswords() {
+    private fun validatePasswords(): Boolean {
         val password = passwordField.text.toString()
         val confirmPassword = repeatPasswordField.text.toString()
         val passwordErrorText: TextView = findViewById(R.id.passwordErrorText)
 
         if (password != confirmPassword) {
             passwordErrorText.visibility = View.VISIBLE
+            return false
         } else {
             passwordErrorText.visibility = View.GONE
             Toast.makeText(this, "Sign Up Successful!", Toast.LENGTH_SHORT).show()
+            return true
         }
     }
 }
