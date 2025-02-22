@@ -1,6 +1,7 @@
 package com.kourounis.loopassessmentkourounis.compose.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,14 +14,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +32,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -46,12 +42,10 @@ import coil.compose.AsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
-import com.kourounis.loopassessmentkourounis.R
 import com.kourounis.loopassessmentkourounis.compose.data.Movie
-import com.kourounis.loopassessmentkourounis.compose.screens.components.FavoriteButton
 import com.kourounis.loopassessmentkourounis.compose.screens.components.Loader
+import com.kourounis.loopassessmentkourounis.compose.screens.components.MovieList
 import com.kourounis.loopassessmentkourounis.compose.utils.getFavoriteMovieIds
-import kotlin.math.floor
 
 @Composable
 fun MainScreen(
@@ -92,13 +86,16 @@ fun MainScreenContent(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(vertical = 32.dp, horizontal = 24.dp)
+            .padding(vertical = 32.dp)
     ) {
-        ProfileHeader()
+        ProfileHeader(onGoToAllMovies = onGoToAllMovies)
 
         Spacer(modifier = Modifier.height(64.dp))
 
         Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp),
             text = buildAnnotatedString {
                 append("YOUR ")
                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
@@ -119,6 +116,9 @@ fun MainScreenContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp),
             text = buildAnnotatedString {
                 append("OUR ")
                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
@@ -130,17 +130,22 @@ fun MainScreenContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        StaffPicksList(staffPicks, onMovieDetails) { updatedFavorites ->
+        MovieList(
+            paddingValues = PaddingValues(horizontal = 24.dp),
+            staffPicks,
+            onMovieDetails
+        ) { updatedFavorites ->
             favoriteMovieIds = updatedFavorites.toMutableSet()
         }
     }
 }
 
 @Composable
-private fun ProfileHeader() {
+private fun ProfileHeader(onGoToAllMovies: (() -> Unit)?) {
     Row(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -180,6 +185,7 @@ private fun ProfileHeader() {
                 .clip(RoundedCornerShape(12.dp))
                 .background(Color.White)
                 .padding(8.dp)
+                .clickable { onGoToAllMovies?.invoke() }
         ) {
             Icon(
                 imageVector = Icons.Default.Search,
@@ -199,8 +205,8 @@ private fun MovieFavoritesPager(favoriteMovies: List<Movie>, onMovieDetails: ((M
     HorizontalPager(
         count = favoriteMovies.size,
         state = pagerState,
-        contentPadding = PaddingValues(end = 64.dp),
-        itemSpacing = (-60).dp,
+        contentPadding = PaddingValues(start = 64.dp, end = 64.dp),
+        itemSpacing = (-64).dp,
         modifier = Modifier.fillMaxWidth()
     ) { page ->
 
@@ -209,103 +215,12 @@ private fun MovieFavoritesPager(favoriteMovies: List<Movie>, onMovieDetails: ((M
         AsyncImage(
             model = movie.posterUrl,
             contentDescription = "Movie Poster",
-            modifier = Modifier.width(182.dp).height(270.dp).clip(RoundedCornerShape(14.dp))
-        )
-    }
-}
-
-@Composable
-fun StaffPicksList(
-    staffPicks: List<Movie>,
-    onMovieDetails: ((Movie) -> Unit)?,
-    onFavoriteUpdated: (Set<String>) -> Unit
-) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = Modifier.fillMaxSize()
-    ) {
-        items(staffPicks) { movie ->
-            StaffPickItem(movie, onMovieDetails, onFavoriteUpdated)
-        }
-    }
-}
-
-@Composable
-fun StaffPickItem(
-    movie: Movie,
-    onMovieDetails: ((Movie) -> Unit)?,
-    onFavoriteUpdated: (Set<String>) -> Unit
-) {
-
-    val context = LocalContext.current
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        AsyncImage(
-            model = movie.posterUrl,
-            contentDescription = "Movie Poster",
             modifier = Modifier
-                .height(89.dp)
-                .width(60.dp)
-                .clip(RoundedCornerShape(8.dp)),
-            contentScale = ContentScale.FillBounds
+                .shadow(8.dp, shape = RoundedCornerShape(14.dp))
+                .clip(RoundedCornerShape(14.dp))
+                .width(182.dp)
+                .height(270.dp)
         )
-
-        Spacer(modifier = Modifier.width(16.dp))
-
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = movie.releaseDate.split("-")[0],
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Light
-            )
-            Text(
-                text = movie.title,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
-
-            Row {
-                val maxRating = 5
-                val filledStars = floor(movie.rating).toInt()
-                val hasHalfStar = movie.rating % 1 != 0.0
-                val emptyStars =
-                    maxRating - filledStars - if (hasHalfStar) 1 else 0
-
-                repeat(filledStars) {
-                    Icon(
-                        imageVector = Icons.Filled.Star,
-                        contentDescription = "Filled Star",
-                        tint = Color(0XFFFD9E02),
-                        modifier = Modifier.size(16.dp)
-                    )
-                }
-
-                if (hasHalfStar) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_half_star),
-                        contentDescription = "Half Star",
-                        tint = Color(0XFFFD9E02),
-                        modifier = Modifier.size(16.dp)
-                    )
-                }
-
-                repeat(emptyStars) {
-                    Icon(
-                        imageVector = Icons.Filled.Star,
-                        contentDescription = "Empty Star",
-                        tint = Color.Gray,
-                        modifier = Modifier.size(16.dp)
-                    )
-                }
-            }
-        }
-
-
-        FavoriteButton(movie, context, onFavoriteUpdated)
     }
 }
+

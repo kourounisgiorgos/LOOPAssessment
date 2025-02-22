@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.*
 import com.kourounis.loopassessmentkourounis.R
 import com.kourounis.loopassessmentkourounis.compose.data.Movie
+import com.kourounis.loopassessmentkourounis.compose.screens.AllMoviesScreen
 import com.kourounis.loopassessmentkourounis.compose.utils.loadMoviesFromJson
 
 class ComposeActivity : ComponentActivity() {
@@ -39,7 +40,16 @@ fun ComposeNavigation() {
             MainScreen(
                 movies = movies.value,
                 staffPicks = staffPicks.value,
-                onGoToAllMovies = { navController.navigate("all-movies") },
+                onGoToAllMovies = { navController.navigate("all-movies-screen") },
+                onMovieDetails = { navController.navigate("movie-details") }
+            )
+        }
+
+        composable("all-movies-screen")
+        {
+            AllMoviesScreen(
+                movies = movies.value,
+                onBack = { navController.navigate("main-screen") },
                 onMovieDetails = { navController.navigate("movie-details") }
             )
         }

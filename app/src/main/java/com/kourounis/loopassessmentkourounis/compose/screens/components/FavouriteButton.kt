@@ -1,7 +1,6 @@
 package com.kourounis.loopassessmentkourounis.compose.screens.components
 
 import android.content.Context
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -24,7 +23,9 @@ fun FavoriteButton(movie: Movie, context: Context, onFavoriteUpdated: (Set<Strin
     var isFavorite by remember { mutableStateOf(movie.id.toString() in getFavoriteMovieIds(context)) }
 
     Icon(
-        painter = painterResource(R.drawable.ic_bookmark),
+        painter = if (isFavorite) painterResource(R.drawable.ic_bookmark_filled) else painterResource(
+            R.drawable.ic_bookmark
+        ),
         contentDescription = "Favorite",
         modifier = Modifier
             .size(24.dp)
