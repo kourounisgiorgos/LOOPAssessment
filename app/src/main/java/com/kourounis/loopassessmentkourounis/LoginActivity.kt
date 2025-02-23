@@ -77,7 +77,7 @@ class LoginActivity : AppCompatActivity() {
             passwordField.text.clear()
             repeatPasswordField.text.clear()
 
-            if(true){
+            if(isValidated){
                 val intent = Intent(this, ComposeActivity::class.java)
                 startActivity(intent)
             }

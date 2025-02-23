@@ -1,5 +1,4 @@
 [versions]
-accompanistPager = "0.28.0"
 agp = "8.6.1"
 coilCompose = "2.5.0"
 gson = "2.10.1"
@@ -18,7 +17,6 @@ ui = "1.7.8"
 uiToolingPreviewAndroid = "1.7.8"
 
 [libraries]
-accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }

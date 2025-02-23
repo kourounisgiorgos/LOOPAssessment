@@ -60,5 +60,4 @@ dependencies {
     implementation (libs.androidx.material3)
     implementation (libs.gson)
     implementation(libs.coil.compose)
-    implementation (libs.accompanist.pager)
 }
